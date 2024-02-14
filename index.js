@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const { generateFromEmail, generateUsername } = require("unique-username-generator");
 var cors = require("cors");
 const { Skill, User } = require("./models/user");
 const bodyParser = require("body-parser");
@@ -24,7 +25,7 @@ mongoose
   .catch((err) => console.log(err));
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("Hello World!");
 });
 
 app.get("/users", async (req, res) => {
@@ -32,8 +33,13 @@ app.get("/users", async (req, res) => {
   res.send(users);
 });
 
-app.get("/user/:id", async (req, res) => {
+app.get("/user/id/:id", async (req, res) => {
   const user = await User.findById(req.params.id);
+  res.send(user);
+});
+
+app.get("/user/username/:username", async (req, res) => {
+  const user = await User.findOne({ username: req.params.username });
   res.send(user);
 });
 
@@ -50,6 +56,9 @@ app.put("/user/:id", async (req, res) => {
 
 app.post("/new-user", async (req, res, next) => {
   const user = new User(req.body);
+  if (!user.username) {
+    user.username = generateUsername("", 3);
+  }
   const skills = req.body.skills;
   try {
     await user.save();

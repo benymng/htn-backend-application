@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  username: {
+    type: String,
+    required: true,
+  },
   company: {
     type: String,
   },
