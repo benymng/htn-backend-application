@@ -34,8 +34,19 @@ app.get("/users", async (req, res) => {
 
 app.get("/user/:id", async (req, res) => {
   const user = await User.findById(req.params.id);
-  res.send(user)
-})
+  res.send(user);
+});
+
+app.put("/user/:id", async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.send(user);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 app.post("/new-user", async (req, res, next) => {
   console.log(req.body);
@@ -45,16 +56,6 @@ app.post("/new-user", async (req, res, next) => {
     res.send(user);
   } catch (error) {
     res.status(500).send(error);
-  }
-});
-
-app.post("/new-users", async (req, res, next) => {
-  const users = req.body;
-  try {
-    await User.insertMany(users);
-    res.send(users);
-  } catch (error) {
-    res.status;
   }
 });
 
