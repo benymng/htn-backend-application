@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { generateFromEmail, generateUsername } = require("unique-username-generator");
+const { generateUsername } = require("unique-username-generator");
 var cors = require("cors");
 const { Skill, User } = require("./models/user");
+const { Group } = require("./models/group");
 const bodyParser = require("body-parser");
 
 app.use(cors());
@@ -104,6 +105,38 @@ app.get("/skills", async (req, res) => {
     return skill.count >= min_freq && skill.count <= max_freq;
   });
   res.send(skills);
+});
+
+app.post("/create-group", async(req, res) => {
+  // expecting an array of usernames that will be grouped together
+  const groupName = req.body.groupName;
+  const group = req.body.usernames;
+  if (group.length < 2) {
+    res.status(400).send("Group must contain at least two users");
+  }
+  else if (group.length > 4) {
+    res.status(400).send("Group must contain at most four users");
+  }
+  // verify that all users exist
+  let members = [];
+  for (let i = 0; i < group.length; i++) {
+    const user = await User.findOne({ username: group[i] });
+    if (!user || user.group) {
+      res.status(400).send("User not found");
+    }
+    members.append(user);
+  }
+  // sets the group for each user
+  for (let i = 0; i < members.length; i++) {
+    members[i].group = groupName;
+    members[i].save();
+  }
+  // create the group and save it to the database
+  const newGroup = new Group({
+    groupName: groupName,
+    groupMemberUsernames: group,
+  });
+  newGroup.save();
 });
 
 app.listen(port, () => {
