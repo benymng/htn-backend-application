@@ -32,6 +32,11 @@ app.get("/users", async (req, res) => {
   res.send(users);
 });
 
+app.get("/user/:id", async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.send(user)
+})
+
 app.post("/new-user", async (req, res, next) => {
   console.log(req.body);
   const user = new User(req.body);
