@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
   },
   group: {
     type: String,
+    default: null,
   },
 });
 

@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const { generateUsername } = require("unique-username-generator");
 var cors = require("cors");
 const { Skill, User } = require("./models/user");
-const { Group } = require("./models/group");
+const Group = require("./models/group");
 const bodyParser = require("body-parser");
 
 app.use(cors());
@@ -124,7 +124,7 @@ app.post("/create-group", async(req, res) => {
     if (!user || user.group) {
       res.status(400).send("User not found");
     }
-    members.append(user);
+    members.push(user);
   }
   // sets the group for each user
   for (let i = 0; i < members.length; i++) {
@@ -137,6 +137,21 @@ app.post("/create-group", async(req, res) => {
     groupMemberUsernames: group,
   });
   newGroup.save();
+});
+
+app.get("/groups", async(req, res) => {
+  const groups = await Group.find();
+  res.send(groups);
+});
+
+app.get("/group/:groupName", async(req, res) => {
+  const group = await Group.findOne({ groupName: req.params.groupName });
+  res.send(group);
+});
+
+app.get("/ungrouped-users", async(req, res) => {
+  const users = await User.find({ group: null });
+  res.send(users);
 });
 
 app.listen(port, () => {
