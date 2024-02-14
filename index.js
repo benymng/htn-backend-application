@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 var cors = require("cors");
-const User = require("./models/user");
+const { Skill, User } = require("./models/user");
 const bodyParser = require("body-parser");
 
 app.use(cors());
@@ -49,14 +49,52 @@ app.put("/user/:id", async (req, res) => {
 });
 
 app.post("/new-user", async (req, res, next) => {
-  console.log(req.body);
   const user = new User(req.body);
+  const skills = req.body.skills;
   try {
     await user.save();
+    const skillPromises = skills.map(async (skill) => {
+      const existingSkill = await Skill.findOne({ skill: skill.skill });
+      if (existingSkill) {
+        existingSkill.count += 1;
+        await existingSkill.save();
+      } else {
+        const newSkill = new Skill({
+          skill: skill.skill,
+          rating: skill.rating,
+          count: 1,
+        });
+        await newSkill.save();
+      }
+    });
+
+    await Promise.all(skillPromises);
+
     res.send(user);
   } catch (error) {
     res.status(500).send(error);
   }
+});
+
+app.get("/num-users-with-skill/:skill", async (req, res) => {
+  const skill = req.params.skill.replace(/-/g, " ");
+  const matchingSkill = await Skill.findOne({
+    skill: { $regex: new RegExp(skill, "i") },
+  });
+  if (matchingSkill) {
+    res.send({ count: matchingSkill.count });
+  } else {
+    res.send({ count: 0 });
+  }
+});
+
+app.get("/skills", async (req, res) => {
+  const min_freq = req.query.min_frequency || 0;
+  const max_freq = req.query.max_frequency || Infinity;
+  const skills = (await Skill.find()).filter((skill) => {
+    return skill.count >= min_freq && skill.count <= max_freq;
+  });
+  res.send(skills);
 });
 
 app.listen(port, () => {

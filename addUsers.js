@@ -15,11 +15,7 @@ async function loadUsersFromFile(filePath) {
 
 async function addUser(user) {
   try {
-    const response = await axios.post(API_ENDPOINT, user, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.post(API_ENDPOINT, user);
     console.log(`Added user ${user.name} successfully:`, response.data);
   } catch (error) {
     console.error(

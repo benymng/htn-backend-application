@@ -9,6 +9,10 @@ const skillSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  count: {
+    type: Number,
+    default: null,
+  },
 });
 
 const userSchema = new mongoose.Schema({
@@ -32,4 +36,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = {
+  Skill: mongoose.model("Skill", skillSchema),
+  User: mongoose.model("User", userSchema),
+};
