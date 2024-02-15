@@ -2,6 +2,15 @@ const express = require("express");
 const router = express.Router();
 const { Skill, User } = require("../models/user");
 const { generateUsername } = require("unique-username-generator");
+const { Pinecone } = require("@pinecone-database/pinecone");
+
+const configurePineconeDb = async () => {
+  const pinecone = new Pinecone({
+    apiKey: process.env.PINECONE_API_KEY,
+  });
+  const index = pinecone.Index("hack-the-north-challenge");
+  return index;
+}
 
 router.get("/", async (req, res) => {
   const users = await User.find().sort({ createdAt: -1 });
@@ -31,6 +40,15 @@ router.put("/id/:id", async (req, res) => {
 
 router.post("/new-user", async (req, res, next) => {
   const user = new User(req.body);
+  const skillArray = await Skill.find().then(skills => skills.map(skill => skill.skill));
+  const userSkills = req.body.skills.map(skill => skill.skill);
+  // create an array of 1s and 0s to represent the user's skills to be inserted into the vector database
+  const matchArray = skillArray.map(skill => userSkills.includes(skill) ? 1 : 0);
+  const pineConeIndex = await configurePineconeDb();
+  await pineConeIndex.upsert([{
+    id: user._id,
+    values: matchArray
+  }])
   if (!user.username) {
     user.username = generateUsername("", 3);
   }
