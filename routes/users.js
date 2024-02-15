@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Skill, User } = require("../models/user");
+const { generateUsername } = require("unique-username-generator");
 
 router.get("/", async (req, res) => {
   const users = await User.find().sort({ createdAt: -1 });

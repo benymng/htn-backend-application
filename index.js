@@ -1,10 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { generateUsername } = require("unique-username-generator");
 var cors = require("cors");
-const { Skill, User } = require("./models/user");
-const Group = require("./models/group");
 const bodyParser = require("body-parser");
 
 app.use(cors());

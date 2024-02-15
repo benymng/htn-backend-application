@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Group = require("../models/group");
+const { User } = require("../models/user");
 
 router.post("/create-group", async(req, res) => {
   // expecting an array of usernames that will be grouped together
