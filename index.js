@@ -17,7 +17,7 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let port = process.env.PORT || 3003;
+let port = process.env.PORT || 3001;
 const db = require("./config/key").mongoURI;
 
 mongoose

@@ -2,6 +2,72 @@ const express = require("express");
 const router = express.Router();
 const Group = require("../models/group");
 const { User } = require("../models/user");
+const axios = require("axios");
+const { generateUsername } = require("unique-username-generator");
+const { Pinecone } = require("@pinecone-database/pinecone");
+
+const configurePineconeDb = async () => {
+  const pinecone = new Pinecone({
+    apiKey: process.env.PINECONE_API_KEY,
+  });
+  const index = pinecone.Index("hack-the-north-challenge");
+  return index;
+};
+
+router.get("/group-individual/:id", async(req, res) => {
+  const id = req.params.id;
+  const pineConeIndex = await configurePineconeDb();
+   const newGroup = []
+    const fetchUserResponse = await pineConeIndex.fetch([id])
+    const userValues = fetchUserResponse.records[id].values
+    const matches = await pineConeIndex.query({
+      vector: userValues,
+      topK: 10,
+    })
+    for (const user of matches) {
+      const potentialTeammate = await User.findById(user.id);
+      if (potentialTeammate.group == null) {
+        newGroup.push(potentialTeammate.username);
+      }
+      if (newGroup.length == 3) {
+        newGroup.push(user.username);
+        break;
+      }
+    }
+    axios.post(`${process.env.PORT}/groups/create-group`, {
+      groupName: generateUsername(),
+      usernames: newGroup
+    })
+    res.send("Group created")
+})
+
+router.post("/group-ungrouped-users", async(req, res) => {
+  const pineConeIndex = await configurePineconeDb();
+  const ungroupedUsers = await User.find({ group: null });
+  ungroupedUsers.map(async(user) => {
+    const newGroup = []
+    const fetchUserResponse = await pineConeIndex.fetch([user._id])
+    const userValues = fetchUserResponse.records[user._id].values
+    const matches = await pineConeIndex.query({
+      vector: userValues,
+      topK: 10,
+    })
+    for (const user of matches) {
+      const potentialTeammate = await User.findById(user.id);
+      if (potentialTeammate.group == null) {
+        newGroup.push(potentialTeammate.username);
+      }
+      if (newGroup.length == 3) {
+        newGroup.push(user.username);
+        break;
+      }
+    }
+    axios.post(`${process.env.PORT}/groups/create-group`, {
+      groupName: generateUsername(),
+      usernames: newGroup
+    })
+  })
+})
 
 router.post("/create-group", async(req, res) => {
   // expecting an array of usernames that will be grouped together

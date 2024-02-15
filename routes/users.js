@@ -17,6 +17,25 @@ router.get("/", async (req, res) => {
   res.send(users);
 });
 
+// endpoint to insert a user's skills into the pinecone database with their associated ID
+router.get("/insert/:username", async (req, res) => {
+  const username = req.params.username;
+  const user = await User.findOne({ username: username });
+  if (!user) {
+    res.status(404).send("User not found");
+  }
+  const skillArray = await Skill.find().then(skills => skills.map(skill => skill.skill));
+  const userSkills = user.skills.map(skill => skill.skill);
+  // create an array of 1s and 0s to represent the user's skills to be inserted into the vector database
+  const matchArray = skillArray.map(skill => userSkills.includes(skill) ? 1 : 0);
+  res.send(matchArray)
+  const pineConeIndex = await configurePineconeDb();
+  await pineConeIndex.upsert([{
+    id: user._id.toString(),
+    values: matchArray
+  }])
+})
+
 router.get("/id/:id", async (req, res) => {
   const user = await User.findById(req.params.id);
   res.send(user);
