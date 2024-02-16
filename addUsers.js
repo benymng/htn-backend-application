@@ -1,7 +1,7 @@
 const axios = require("axios");
 const fs = require("fs").promises;
 
-const API_ENDPOINT = "http://localhost:3003/new-user";
+const API_ENDPOINT = "http://localhost:3001/users/new-user";
 
 async function loadUsersFromFile(filePath) {
   try {
@@ -29,9 +29,12 @@ async function main() {
   const filePath = "./data.json";
   const users = await loadUsersFromFile(filePath);
 
-  for (const user of users) {
-    await addUser(user);
+  for (let i = 1; i < 10; i++) {
+    await addUser(users[i]);
   }
+  // for (const user of users) {
+  //   await addUser(user);
+  // }
 }
 
 main();
