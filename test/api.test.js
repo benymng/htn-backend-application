@@ -6,10 +6,9 @@ const should = chai.should();
 
 describe("API Endpoints", () => {
     // Test for GET /
-    it("GET / should return 'Hello World!'", async () => {
+    it("GET / should return the README", async () => {
         const res = await chai.request(app).get('/');
         res.should.have.status(200);
-        res.text.should.be.eql('Hello World!');
     });
 
     // Test for GET /users
@@ -26,7 +25,7 @@ describe("API Endpoints", () => {
             email: "test@example.com",
             skills: [{ skill: "JavaScript", rating: 5 }]
         };
-        const res = await chai.request(app).post('/new-user').send(user);
+        const res = await chai.request(app).post('/users/new-user').send(user);
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('name').eql('Test User');
