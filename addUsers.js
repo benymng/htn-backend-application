@@ -25,16 +25,26 @@ async function addUser(user) {
   }
 }
 
+async function insertUserSkills(userId, skills) {
+  try {
+    const users = await axios.get("http://localhost:3001/users");
+    const response = await axios.get(
+      "http://localhost:3001/users/insert/" + userId
+    );
+    console.log("inserted user into vector database");
+  } catch (error) {
+    console.error("Error inserting user into vector database:", error);
+  }
+}
+
 async function main() {
   const filePath = "./data.json";
   const users = await loadUsersFromFile(filePath);
 
-  for (let i = 1; i < 10; i++) {
-    await addUser(users[i]);
+  for (const user of users) {
+    await addUser(user);
+    // await insertUserSkills(user._id);
   }
-  // for (const user of users) {
-  //   await addUser(user);
-  // }
 }
 
 main();

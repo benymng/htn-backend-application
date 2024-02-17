@@ -12,15 +12,8 @@ const configurePineconeDb = async () => {
   return index;
 };
 
-router.get("/", async (req, res) => {
-  const users = await User.find().sort({ createdAt: -1 });
-  res.send(users);
-});
-
-// endpoint to insert a user's skills into the pinecone database with their associated ID
-router.get("/insert/:username", async (req, res) => {
-  const username = req.params.username;
-  const user = await User.findOne({ username: username });
+const insertIntoPinecone = async (id) => {
+  const user = await User.findById(id);
   if (!user) {
     res.status(404).send("User not found");
   }
@@ -40,6 +33,26 @@ router.get("/insert/:username", async (req, res) => {
       values: matchArray,
     },
   ]);
+};
+
+router.get("/", async (req, res) => {
+  const users = await User.find().sort({ createdAt: -1 });
+  res.send(users);
+});
+
+// endpoint to insert a user's skills into the pinecone database with their associated ID
+router.get("/insert/:id", async (req, res) => {
+  const id = req.params.id;
+  await insertIntoPinecone(id);
+  res.send("Inserted user into pinecone");
+});
+
+router.get("/insertAll", async (req, res) => {
+  const users = await User.find();
+  users.map(async (user) => {
+    await insertIntoPinecone(user._id);
+  });
+  res.send("Inserted all users into pinecone");
 });
 
 router.get("/id/:id", async (req, res) => {
@@ -47,7 +60,7 @@ router.get("/id/:id", async (req, res) => {
   res.send(user);
 });
 
-router.get("name/:username", async (req, res) => {
+router.get("/username/:username", async (req, res) => {
   const user = await User.findOne({ username: req.params.username });
   res.send(user);
 });
@@ -65,21 +78,6 @@ router.put("/id/:id", async (req, res) => {
 
 router.post("/new-user", async (req, res, next) => {
   const user = new User(req.body);
-  const skillArray = await Skill.find().then((skills) =>
-    skills.map((skill) => skill.skill)
-  );
-  const userSkills = req.body.skills.map((skill) => skill.skill);
-  // create an array of 1s and 0s to represent the user's skills to be inserted into the vector database
-  const matchArray = skillArray.map((skill) =>
-    userSkills.includes(skill) ? 1 : 0
-  );
-  const pineConeIndex = await configurePineconeDb();
-  await pineConeIndex.upsert([
-    {
-      id: user._id.toString(),
-      values: matchArray,
-    },
-  ]);
   if (!user.username) {
     user.username = generateUsername("", 3);
   }
