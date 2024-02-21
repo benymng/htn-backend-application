@@ -1,7 +1,7 @@
 const axios = require("axios");
 const fs = require("fs").promises;
 
-const API_ENDPOINT = "http://localhost:3001/users/new-user";
+const API_ENDPOINT = process.env.PORT + "/users/new-user";
 
 async function loadUsersFromFile(filePath) {
   try {
@@ -27,9 +27,9 @@ async function addUser(user) {
 
 async function insertUserSkills(userId, skills) {
   try {
-    const users = await axios.get("http://localhost:3001/users");
+    const users = await axios.get(process.env.PORT + "/users");
     const response = await axios.get(
-      "http://localhost:3001/users/insert/" + userId
+      process.env.PORT + "/users/insert/" + userId
     );
     console.log("inserted user into vector database");
   } catch (error) {
@@ -38,7 +38,7 @@ async function insertUserSkills(userId, skills) {
 }
 
 async function main() {
-  const filePath = "./data.json";
+  const filePath = "../data.json";
   const users = await loadUsersFromFile(filePath);
 
   for (const user of users) {

@@ -7,13 +7,13 @@ const { Pinecone } = require("@pinecone-database/pinecone");
 
 /**
  * Configures and returns a Pinecone index object which is used to query and upsert vectors
- * 
+ *
  * This function initializes the Pinecone database connection using the provided API key
- * from environment variables and creates or accesses a database index named 
+ * from environment variables and creates or accesses a database index named
  * "hack-the-north-challenge".
- * 
+ *
  * @returns {Promise<Pinecone.Index>} - A Pinecone index object
- * 
+ *
  */
 const configurePineconeDb = async () => {
   const pinecone = new Pinecone({
@@ -25,7 +25,7 @@ const configurePineconeDb = async () => {
 
 /**
  * Helper function to create a group and set the group for each user
- * 
+ *
  * @param {string} groupname group name to be created
  * @param {[string]} usernames array of strings containing the usernames of the users to be grouped
  * @returns {Promise<void>}
@@ -153,7 +153,6 @@ router.get("/:groupName", async (req, res) => {
   const group = await Group.findOne({ groupName: req.params.groupName });
   res.send(group);
 });
-
 
 /**
  * Route to find all users that don't have a group yet
