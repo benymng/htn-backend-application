@@ -4,13 +4,28 @@ The API is hosted at [Hack the North Backend Challenge](https://htn-backend-chal
 
 ## Overview
 
-In this application, I am using MongoDB, Express, Node and PineconeDB. In addition to the key functionality outlined in the challenge description for managing users and skills, I have created matching endpoints to handle group formationd during the hackathon.
+This application is designed with MongoDB, Express, Node, and PineconeDB to address the challenges of managing users and skills, with an additional focus on group formation during the hackathon. Utilizing both traditional and vector databases, it offers efficient matching based on skills, interests, and other relevant metrics, aiming to minimize discrepancies and enhance team compatibility.
+
+## Getting Started
+
+To begin interacting with the API, follow these steps:
+
+- **Accessing the API:**
+  - Use the Vercel app link provided above. This link can be utilized in tools like Postman or directly in your web browser to explore and test the API's functionalities.
+  - From within the repository you can also use `npm start` to start the server with Nodemon on your localhost.
+
+- **Running Unit Tests:**
+  - The project includes a suite of basic unit tests for quality assurance and functionality verification. To run these tests:
+    1. Clone the repository to your local machine.
+    2. In the project directory, install the necessary dependencies by executing `npm install` in your terminal.
+    3. Run the tests by executing `npm test`. This will initiate the test suite, allowing you to verify that the API operates as expected.
+
 
 ## Group Formation Explanation
 
-One of the most common challenges especially for new hackers is the difficulty in finding a group of other students with similar interests, skills and skill level. Oftentimes, hackers are randomly assigned to other students and each of them want to utilize different tech stacks or have disparate interests. As a result, large compromises often must be made by one or more of the members in a team. Although this is an inevitable problem with all group projects, my goal was to find a better way to create groups which minimizes discrepencies between the skills between hackers. For the sake of demonstrating the functionality, I have done the matching based on the skills provided in the mock data provided, however, these same endpoints can easily be extended to include the interests, skill level and other key metrics for matching students. By leveraging a vector database, the matching of students is done drastically more efficiently than a traditional database and allows for a better matching of students based on their similarity. Moreover, the vector database can easily be extended to match mentors, friends or sponsors to students which would undoubtably improve the overall hackathon experience!
+One of the challenges that I wanted to tackle in my API is the problem of finding compatible team members in hackathons, particularly for newcomers who may have limited skillsets and want to work with others that have similar skills as them. This was the inspiration for the development of a system that facilitates the formation of groups based on similarities in skills and interests. By leveraging a vector database, this system significantly improves the efficiency of matching participants. Although currently focused on finding teammates for the hackathon, this feature is easily extendible to matching mentors, sponsors and friends.
 
-### Steps:
+### Group Formation Steps:
 
 1. **Vector Representation**
 
@@ -18,7 +33,7 @@ One of the most common challenges especially for new hackers is the difficulty i
 
 2. **Insertion into Pinecone**
 
-   - When a new user is added via the `/new-user` endpoint, their skills vector is inserted into Pinecone. This is done using Pinecone's `upsert` method, which either inserts a new vector or updates an existing one.
+   - When a new user is added via the `/new-user` endpoint, their skills vector is inserted into Pinecone which stores their user ID and a vector (like [0, 1, 1, 0, ...]). The assumption for this is that there are a set number of skills which we deem as key metrics to match users together. This is done using Pinecone's `upsert` method, which either inserts a new vector or updates an existing one.
 
 3. **Similarity Search**
 
@@ -30,12 +45,12 @@ One of the most common challenges especially for new hackers is the difficulty i
 ## File Structure
 
 - **`index.js`**: Main application entry point. Initializes the Express server and MongoDB connection.
-- **`addUsers.js`**: Script to add users from a JSON file to the database via the `/new-user` endpoint.
+- **`scripts/addUsers.js`**: Script to add users from a JSON file to the database via the `/new-user` endpoint.
 - **`models/`**:
   - `user.js`: Defines the User and Skill Mongoose schema.
   - `group.js`: Defines the Group Mongoose schema.
 - **`config/key.js`**: Contains the MongoDB connection string.
-- **`data.json`**: User data in JSON format.
+- **`data.json`**: Mock User data in JSON format.
 - **`vercel.json`**: Configuration for Vercel deployment.
 - **`routes/`**:
   - `users.js`: Routes for user-related operations.
@@ -48,21 +63,32 @@ One of the most common challenges especially for new hackers is the difficulty i
 ### Users
 
 - **GET `/users`**: Fetch all users, sorted by creation date (descending).
-- **GET `/user/id/:id`**: Fetch a user by ID.
-- **GET `/user/username/:username`**: Fetch a user by username.
+- **GET `/users/id/:id`**: Fetch a user by ID.
+- **GET `/users/username/:username`**: Fetch a user by username.
+- **GET `/users/insert/:id`**: Insert a user based on their ID into the vector database.
+- **GET `/users/insertAll`**: Insert all users into the vector database.
 - **PUT `/user/:id`**: Update a user by ID.
 - **POST `/new-user`**: Add a new user.
 
 ### Groups
 
-- **POST `/groups`**: Create a new group.
+- **GET `/groups/`**: Fetch all groups.
 - **GET `/groups/:id`**: Fetch a group by ID.
+- **GET `/groups/:groupName`**: Fetch a group by their group name.
+- **GET `/groups/groupIndividual/:id`**: Create a group for a particular user.
+- **GET `/groups/group-ungrouped-users`**: Create groups for all users that don't have a group yet.
+- **GET `/groups/ungrouped-users`**: Fetch all users that don't have a group yet.
+- **POST `/groups`**: Create a new group.
 
 ### Skills
 
 - **GET `/skills`**: Fetch all skills, with optional filtering by frequency.
-- **GET `/num-users-with-skill/:skill`**: Fetch the number of users with a specific skill.
+- **GET `/skills/count/:skill`**: Fetch the number of users with a specific skill.
 
 ## Environment Variables
 
 - **`DB_URI_PASSWORD`**: MongoDB database password.
+- **`PORT`**: The port that the server is running on.
+- **`PINECONE_API_KEY`**: The API key for PineconeDB.
+
+
