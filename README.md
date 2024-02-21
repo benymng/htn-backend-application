@@ -67,7 +67,8 @@ One of the challenges that I wanted to tackle in my API is the problem of findin
 - **GET `/users/username/:username`**: Fetch a user by username.
 - **GET `/users/insert/:id`**: Insert a user based on their ID into the vector database.
 - **GET `/users/insertAll`**: Insert all users into the vector database.
-- **PUT `/user/:id`**: Update a user by ID.
+- **DEL `/users/:id`**: Delete a user by ID.
+- **PUT `/users/:id`**: Update a user by ID.
 - **POST `/new-user`**: Add a new user.
 
 ### Groups

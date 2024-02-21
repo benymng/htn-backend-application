@@ -3,6 +3,7 @@ const router = express.Router();
 const { Skill, User } = require("../models/user");
 const { generateUsername } = require("unique-username-generator");
 const { Pinecone } = require("@pinecone-database/pinecone");
+const user = require("../models/user");
 
 const configurePineconeDb = async () => {
   const pinecone = new Pinecone({
@@ -63,6 +64,21 @@ router.get("/id/:id", async (req, res) => {
 router.get("/username/:username", async (req, res) => {
   const user = await User.findOne({ username: req.params.username });
   res.send(user);
+});
+
+router.delete("/id/:id", async (req, res) => {
+  const { id } = req.params; 
+  try {
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (deletedUser) {
+      res.status(200).json({ message: "User deleted successfully", userId: id });
+    } else {
+      res.status(404).json({ message: "User not found", userId: id });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred during deletion", error: error.message });
+  }
 });
 
 router.put("/id/:id", async (req, res) => {
