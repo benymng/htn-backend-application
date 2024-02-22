@@ -11,7 +11,7 @@ This application is designed with MongoDB, Express, Node, and PineconeDB to addr
 To begin interacting with the API, follow these steps:
 
 - **Accessing the API:**
-  - The easiest way to begin using the endpoints is to use the above Vercel link! You will be greeted with this project's ReadMe which you can then acess the endopints such as `/users` by changing the url (which will return all of the users from the mock data provided which have already been populated into the database). This link can be utilized in tools like Postman or directly in your web browser to explore and test the API's functionalities.
+  - The easiest way to begin exploring the endpoints is to use the above Vercel link! This will direct you to the project's README page which from there, you can easily navigate to various endpoints, such as /users, by altering the URL. This particular endpoint retrieves all user data from the pre-populated mock database.
   - If you want to run locally, from within the repository you can also use `npm start` to start the server with Nodemon on your localhost.
 
 - **Running Unit Tests:**
