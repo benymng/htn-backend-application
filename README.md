@@ -1,18 +1,18 @@
 # Hack the North Backend Challenge README
 
-The API is hosted at [Hack the North Backend Challenge](https://htn-backend-challenge-3sno5bl95-benymng.vercel.app/).
+Hosted API: [Hack the North Backend Challenge](https://htn-backend-challenge-3sno5bl95-benymng.vercel.app/).
 
 ## Overview
 
-This application is designed with MongoDB, Express, Node, and PineconeDB to address the challenges of managing users and skills, with an additional focus on group formation during the hackathon. Utilizing both traditional and vector databases, it offers efficient matching based on skills, interests, and other relevant metrics, aiming to minimize discrepancies and enhance team compatibility.
+This application is designed with MongoDB, Express, Node, and PineconeDB to address the challenges of managing users and skills, with an additional focus on group formation during the hackathon. Utilizing both traditional and vector databases, it offers efficient matching based on skills, interests, and other relevant metrics, aiming to minimize discrepancies and enhance team compatibility!
 
 ## Getting Started
 
 To begin interacting with the API, follow these steps:
 
 - **Accessing the API:**
-  - Use the Vercel app link provided above. This link can be utilized in tools like Postman or directly in your web browser to explore and test the API's functionalities.
-  - From within the repository you can also use `npm start` to start the server with Nodemon on your localhost.
+  - The easiest way to begin using the endpoints is to use the above Vercel link! This link can be utilized in tools like Postman or directly in your web browser to explore and test the API's functionalities.
+  - If you want to run locally, from within the repository you can also use `npm start` to start the server with Nodemon on your localhost.
 
 - **Running Unit Tests:**
   - The project includes a suite of basic unit tests for quality assurance and functionality verification. To run these tests:
@@ -23,7 +23,7 @@ To begin interacting with the API, follow these steps:
 
 ## Group Formation Explanation
 
-One of the challenges that I wanted to tackle in my API is the problem of finding compatible team members in hackathons, particularly for newcomers who may have limited skillsets and want to work with others that have similar skills as them. This was the inspiration for the development of a system that facilitates the formation of groups based on similarities in skills and interests. By leveraging a vector database, this system significantly improves the efficiency of matching participants. Although currently focused on finding teammates for the hackathon, this feature is easily extendible to matching mentors, sponsors and friends.
+One of the challenges that I wanted to tackle in my API is the problem of finding compatible team members in hackathons, particularly for newcomers who may have limited skillsets and want to work with others that have similar skills as them. This was the inspiration for the development of a system that facilitates the formation of groups based on similarities in skills and interests! By leveraging a vector database, this system significantly improves the efficiency of matching participants. Although currently focused on finding teammates for the hackathon, this feature is easily extendible to matching mentors, sponsors and friends. 🙂
 
 ### Group Formation Steps:
 
