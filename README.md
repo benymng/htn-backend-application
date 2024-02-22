@@ -42,6 +42,10 @@ One of the challenges that I wanted to tackle in my API is the problem of findin
 4. **Group Formation**
    - The users corresponding to the most similar vectors are grouped together. This is done in the `/groups/create-group` endpoint, which creates a new group with the given users.
 
+## Design Choices
+
+One of the decisions I had to make when designing the API was how to separate the skills from the users. Originally, I had the skills as part of the user model but I ultimately decided to create a separate model for the flexibility of querying the skills. This was eventually helpful with the group formation portion of the project because I was able to query the number of skills and form the vector accordingly. Additionally, by creating a separate table for the skills, additional metrics are able to be tracked such as the number of users with certain skills. In the context of a hackathon, I thought that this would be helpful for event planning and narrowing down what speeches would be most relevant to the participants!
+
 ## File Structure
 
 - **`index.js`**: Main application entry point. Initializes the Express server and MongoDB connection.
