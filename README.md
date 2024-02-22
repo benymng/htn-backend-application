@@ -4,7 +4,7 @@ Hosted API: [Hack the North Backend Challenge](https://htn-backend-challenge-3sn
 
 ## Overview
 
-This application is designed with MongoDB, Express, Node, and PineconeDB to address the challenges of managing users and skills, with an additional focus on group formation during the hackathon. Utilizing both traditional and vector databases, it offers efficient matching based on skills, interests, and other relevant metrics, aiming to minimize discrepancies and enhance team compatibility!
+This application is designed with MongoDB, Express, Node, and PineconeDB to address the challenges of managing users and skills, with an additional focus on group formation and management during the hackathon. 
 
 ## Getting Started
 
