@@ -1,6 +1,6 @@
 # Hack the North Backend Challenge README
 
-Hosted API: [Hack the North Backend Challenge](https://htn-backend-challenge-3sno5bl95-benymng.vercel.app/).
+Hosted API: [Hack the North Backend Challenge](https://htn-backend-application.vercel.app/).
 
 ## Overview
 
