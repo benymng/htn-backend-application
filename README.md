@@ -15,7 +15,7 @@ To begin interacting with the API, follow these steps:
   - If you want to run locally, from within the repository you can also use `npm start` to start the server with Nodemon on your localhost.
 
 - **Running Unit Tests:**
-  - The project includes a suite of basic unit tests for quality assurance and functionality verification. To run these tests:
+  - The project includes a some basic unit tests for functionality verification using Chai.js and Mocha. To run these tests:
     1. Clone the repository to your local machine.
     2. In the project directory, install the necessary dependencies by executing `npm install` in your terminal.
     3. Run the tests by executing `npm test`. This will initiate the test suite, allowing you to verify that the API operates as expected.
