@@ -44,7 +44,10 @@ One of the challenges that I wanted to tackle in my API is the problem of findin
 
 ## Design Choices
 
-One of the decisions I had to make when designing the API was how to separate the skills from the users. Originally, I had the skills as part of the user model but I ultimately decided to create a separate model for the flexibility of querying the skills. This was eventually helpful with the group formation portion of the project because I was able to query the number of skills and form the vector accordingly. Additionally, by creating a separate table for the skills, additional metrics are able to be tracked such as the number of users with certain skills. In the context of a hackathon, I thought that this would be helpful for event planning and narrowing down what speeches would be most relevant to the participants!
+One of the decisions I had to make when designing the API was how to separate the skills from the users. Originally, I had the skills as part of the user model but I ultimately decided to create a separate model for the flexibility of querying the skills. This was eventually helpful with the group formation portion of the project because I was able to query the number of skills and form the vector accordingly. Additionally, by creating a separate table for the skills, additional metrics are able to be tracked such as the number of users with certain skills. In the context of a hackathon, I thought that this would be helpful for event planning and narrowing down what workshops would be most relevant to the participants!
+
+Another design choice I made was to use MongoDB instead of a traditional SQL database and using REST instead of GraphQL. The database decision was primarily influenced by the flexibility and development speed that MongoDB provides. For a hackathon backend I thought that this was the best decision because of the constantly evolving data requirements, importance of streamlined development process and because the data requirement is limited to a relatively small size (number of entries is limited by the number of attendees). This thought process was also the reason why I decided against using a GraphQL backend, as I didn't deem the number of user properties to be enough to require efficient data retrieval for specific properties.
+
 
 ## File Structure
 
